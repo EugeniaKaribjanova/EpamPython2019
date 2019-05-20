@@ -8,8 +8,17 @@
 """
 
 def is_permutation(a: str, b: str) -> bool:
-    # Нужно проверить, являются ли строчки 'a' и 'b' перестановками
+    list1 = list(a)
+    list2 = list(b)
+
+    if (len(list1) != len(list2)):
+        return False
+    try:
+     for i in list1:
+        list2.remove(i)
+    except: return False
+    return True
 
 
 assert is_permutation('baba', 'abab')
-assert is_permutation('abbba', 'abab')
+assert not is_permutation('abbba', 'abab')
