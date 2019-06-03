@@ -37,6 +37,8 @@ P.S. За незакрытый файловый дескриптор - кара�
 
 
 import matplotlib.pyplot as plt
+
+
 DNA = open("files/dna.fasta", "r")
 contents = DNA.read()
 DNA.close()
@@ -116,3 +118,15 @@ def translationRNAtoProt(RNA):
 output_file3 = open('./files/proteins.txt', 'w')
 output_file3.write(f'First protein is:{translationRNAtoProt(rna1)}\nSecond protein is:{translationRNAtoProt(rna2)} \n')
 output_file3.close()
+
+def graphStatistics (statistics_DNA):
+    plt.bar(range(len(statistics_DNA)), list(statistics_DNA.values()), align='center')
+    plt.xticks(range(len(statistics_DNA)), list(statistics_DNA.keys()))
+    plt.ylabel('Number of nucs')
+    plt.xlabel(" Nucleotide type")
+    plt.show()
+
+
+graphStatistics(countNucleotides(dnaContents1))
+graphStatistics(countNucleotides(dnaContents2))
+
