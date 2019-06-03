@@ -1,2 +1,2 @@
-First statictics:{'G': 373, 'C': 409, 'A': 217, 'T': 232, '\n': 17}
-Second statistics:{'C': 362, 'A': 146, 'T': 155, 'G': 357, '\n': 15} 
+First statictics:{'G': 373, 'C': 409, 'A': 217, 'T': 232}
+Second statistics:{'C': 362, 'A': 146, 'T': 155, 'G': 357} 

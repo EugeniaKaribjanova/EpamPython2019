@@ -47,10 +47,9 @@ for s in listDnaRead:
     if s.startswith (">"):
          k += 1
     elif (k == 1):
-        dnaContents1 += s+"\n"
+        dnaContents1 += s
     else:
-        dnaContents2 += s+"\n"
-dnaContents1
+        dnaContents2 += s
 
 
 #считаем нуклеотиды
