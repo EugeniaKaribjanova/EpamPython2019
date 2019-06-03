@@ -34,6 +34,9 @@ P.S. За незакрытый файловый дескриптор - кара�
 """
 
 # read the file dna.fasta
+
+
+import matplotlib.pyplot as plt
 DNA = open("files/dna.fasta", "r")
 contents = DNA.read()
 DNA.close()
@@ -101,14 +104,15 @@ def translationRNAtoProt(RNA):
         if indexOfElement % 2 == 0:
             dictionaryOfCodons[sequence] = listOfCodons[indexOfElement + 1]
     # делаем лист из рнк, лепим из него белок
-    RNAlist = [RNA[i:i + 3] for i in range(0, len(RNA), 3)]
+
+    mod = len(RNA) % 3
+    RNAlist = [RNA[i:i + 3] for i in range(0, len(RNA) - mod, 3)]
+
     for key in dictionaryOfCodons:
-        for i in range(len(RNAlist)):
+        for i in range (len(RNAlist)):
             if RNAlist[i] == key:
                 RNAlist[i] = dictionaryOfCodons.get(key)
     return (', '.join(RNAlist)).replace(",","")
-
-
 output_file3 = open('./files/proteins.txt', 'w')
 output_file3.write(f'First protein is:{translationRNAtoProt(rna1)}\nSecond protein is:{translationRNAtoProt(rna2)} \n')
 output_file3.close()
