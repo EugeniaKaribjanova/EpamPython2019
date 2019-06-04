@@ -1,41 +1,48 @@
 
-myfile1 = open("winedata_2.json", "rt")
-contents1 = myfile1.read().replace("{","").replace("\"", "").replace("}, ", "|||").replace('\"',"")
-myfile1.close()
+jsonFile1 = open("winedata_1.json", "rt")
+jsonFile2 = open("winedata_2.json", "rt")
 
-# создали список строк
-listWine = contents1.split("|||")
-# заменили вхождения ":" и нужных "," на "!!!!!!!"
-numbOfDicts=0
+contents1 = jsonFile1.read().replace("]", "").replace("[", "")
+contents2 = jsonFile2.read().replace("]", "").replace("[", "").replace("{", ", {", 1)
+
+fullContents = (contents1 + contents2).replace("{", "").replace("\": ", "@@@").replace("}, ", "|||"). \
+    replace(", \"", "~~~").replace("\"", "")
+jsonFile2.close()
+jsonFile1.close()
+
+listWine = fullContents.split("|||")
+listOfDistinctElements = list(dict.fromkeys(listWine))
+
 listOfDict = []
-for wineString in listWine:
-        wineDictionary = {}
-        reversedString = reversed(wineString)
-        counter = 0
-        rightReverseString = ""
-        for elem3 in reversedString:
-            if( elem3 == ":"):
-               elem3 = "!!!"
-               rightReverseString+=elem3
-               counter+=1
-            if ( elem3 == "," and counter == 1):
-               elem3 = "!!!"
-               counter -= 1
-               rightReverseString+=elem3
-            rightReverseString+= elem3
+for wineString in listOfDistinctElements:
+    wineDictionary = {}
+    listOfPairs = wineString.split("~~~")
 
-        # засплитили строки по !!!!!!! и получили список элементов, сделали словарь для каждого вина
-        rightString=(rightReverseString[::-1])
-        rightList=rightString.split("!!!!!!")
-        for element in rightList:
-            rightList[10]='price'
-            index = rightList.index(element)
-            if ( index % 2 == 0 and index < len(rightList) - 1):
-             wineDictionary[element] = rightList[index + 1]
-        # print(wineDictionary)
-        listOfDict.append(wineDictionary)
-        numbOfDicts+=1
-print(listOfDict)
-Sortedlist=[]
-Sortedlist = sorted(listOfDict, key=lambda k: k['price'])
- 
+    for elem3 in listOfPairs:
+        listOfKeyAndValue = elem3.split("@@@")
+        if len(listOfKeyAndValue) % 2 == 1:
+            print(listOfKeyAndValue)
+        for val in listOfKeyAndValue:
+            index = listOfKeyAndValue.index(val)
+            if val == 'price' and listOfKeyAndValue[index + 1] != 'null':
+                wineDictionary[val] = int(listOfKeyAndValue[index + 1])
+                continue
+            if val == 'price' and listOfKeyAndValue[index + 1] == 'null':
+                wineDictionary[val] = 0
+                continue
+            if val == 'taster_name' and listOfKeyAndValue[index + 1] == 'null':
+                wineDictionary[val] = " "
+                continue
+            if index == 0:
+                wineDictionary[val] = listOfKeyAndValue[index + 1]
+    listOfDict.append(wineDictionary)
+sortedList = listOfDict
+
+sortedList.sort(key=lambda x: x['taster_name'])
+sortedList.sort(key=lambda x: x['price'])
+
+output_file3 = open('sortedJson.json', 'w')
+output_file3.write(str(sortedList).replace("\'", "\"").replace("\" \"", "null").
+                   replace("\"price\": 0", "\"price\": null"))
+output_file3.close()
+
